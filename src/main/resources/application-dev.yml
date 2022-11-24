@@ -26,6 +26,6 @@ spring:
     ansi:
       enabled: always # 디버깅 색 설정
 
-# logging:
-#   level:
-#     '[com.mtcoding.demo]': DEBUG # 로깅 레벨 -> 패키지 
+logging:
+  level:
+    '[com.mtcoding.demo]': DEBUG # 로깅 레벨 -> 패키지 

@@ -36,11 +36,11 @@ public class SecurityConfig {
         http.headers().frameOptions().disable();
         http.csrf().disable();
 
-        http.authorizeRequests()
+        http.authorizeHttpRequests()
                 .antMatchers("/api/transaction/**").authenticated()
                 .antMatchers("/api/user/**").authenticated()
                 .antMatchers("/api/account/**").authenticated()
-                .antMatchers("/api/admin/**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/api/admin/**").hasRole("ROLE_USER")
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
