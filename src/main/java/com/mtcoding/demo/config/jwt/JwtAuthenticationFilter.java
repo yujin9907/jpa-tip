@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -36,7 +37,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         super(authenticationManager);
         this.authenticationManager = authenticationManager;
         this.setAuthenticationFailureHandler(customLoginHandler);
-        super.setAuthenticationFailureHandler(customLoginHandler);
     }
 
     // post의 /login
@@ -56,16 +56,22 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
             return authentication;
         } catch (Exception e) {
-            AuthenticationException exception = (AuthenticationException) e;
-            e.printStackTrace();
+            // AuthenticationException exception = (AuthenticationException) e;
+            // e.printStackTrace();
 
-            try {
-                this.getFailureHandler().onAuthenticationFailure(request, response, exception);
-            } catch (IOException | ServletException e1) {
-                e1.printStackTrace();
-            }
+            // try {
+            // this.getFailureHandler().onAuthenticationFailure(request, response,
+            // exception);
+            // } catch (IOException | ServletException e1) {
+            // e1.printStackTrace();
+            // }
 
-            return null;
+            // return null;
+
+            // 이 오류를 리턴해야 failure 가 정상적으로 실행됨
+            // 굳이 위처럼 넘겨주지 않아도, 리턴을 맞춰주면 결과값을 제대로 리턴하도록 돼있음
+
+            throw new InternalAuthenticationServiceException(e.getMessage());
         }
     }
 
@@ -73,7 +79,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
             Authentication authResult) throws IOException, ServletException {
 
-        log.debug("디버그 : SUSSESS AUTHENTICATION 요청됨");
+        log.debug("디버그 : SUCCESS AUTHENTICATION 요청됨");
 
         LoginUser loginUser = (LoginUser) authResult.getPrincipal();
 
