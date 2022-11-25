@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mtcoding.demo.config.auth.LoginUser;
 import com.mtcoding.demo.dto.UserReqDto.LoginReqDto;
 import com.mtcoding.demo.handler.CustomLoginHandler;
+import com.mtcoding.demo.util.CustomResponseUtil;
 
 // 원래 : 인증, userdetail service 실행하는 역할
 // 목적 : 제이슨으로 받기, 토큰 만들기
@@ -36,7 +37,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager, CustomLoginHandler customLoginHandler) {
         super(authenticationManager);
         this.authenticationManager = authenticationManager;
-        this.setAuthenticationFailureHandler(customLoginHandler);
+        // this.setAuthenticationFailureHandler(customLoginHandler);
     }
 
     // post의 /login
@@ -76,6 +77,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+            AuthenticationException failed) throws IOException, ServletException {
+        CustomResponseUtil.fail(response, "로그인 실패");
+    }
+
+    @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
             Authentication authResult) throws IOException, ServletException {
 
@@ -93,11 +100,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
     }
 
-    @Override
-    protected AuthenticationFailureHandler getFailureHandler() {
+    // @Override
+    // protected AuthenticationFailureHandler getFailureHandler() {
 
-        log.debug("디버그 : 페일핸들러 실행됨");
-        return super.getFailureHandler();
-    }
+    // log.debug("디버그 : 페일핸들러 실행됨");
+    // return super.getFailureHandler();
+    // }
 
 }

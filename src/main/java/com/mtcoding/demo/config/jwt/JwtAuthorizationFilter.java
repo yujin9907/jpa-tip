@@ -1,7 +1,6 @@
 package com.mtcoding.demo.config.jwt;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -20,9 +19,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mtcoding.demo.config.auth.LoginUser;
 import com.mtcoding.demo.config.enums.UserEnum;
 import com.mtcoding.demo.domain.user.User;
-import com.mtcoding.demo.domain.user.UserRepository;
 
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
 // jsesseionid가 먹지 않음 : stateless하게 구현했으므로
@@ -42,7 +39,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         String header = request.getHeader(JwtProperties.HEADER_STRING);
         if (header == null || !header.startsWith(JwtProperties.TOKEN_PREFIX)) {
-            // chain.doFilter(request, response); 필터를 타는 게 아니라 토큰이 없다는 응답을 해야 됨
+            chain.doFilter(request, response); // 필터를 타는 게 아니라 토큰이 없다는 응답을 해야 됨
             return;
         }
         String token = request.getHeader(JwtProperties.HEADER_STRING)
