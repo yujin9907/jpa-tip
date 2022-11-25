@@ -2,6 +2,7 @@ package com.mtcoding.demo.web;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,11 @@ public class UserApiController {
     public ResponseEntity<?> joinControll(@RequestBody JoinReqDto joinReqDto) {
         joinRepsDto join = userService.회원가입(joinReqDto);
         return new ResponseEntity<>(new ResponseDto<>("회원가입 성공", join), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/api/transaction")
+    public ResponseEntity<?> testauthenroization() {
+        return new ResponseEntity<>(new ResponseDto<>("정상", null), HttpStatus.CREATED);
     }
 
 }

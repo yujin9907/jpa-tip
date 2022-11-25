@@ -50,7 +50,7 @@ public class CustomLoginHandler implements AuthenticationSuccessHandler, Authent
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException exception) throws IOException, ServletException {
 
-        log.debug("디버그 : custom login handler 실행됨");
+        log.debug("디버그 : custom login failure handler 실행됨");
         ObjectMapper om = new ObjectMapper();
         ResponseDto<?> responseDto = new ResponseDto<>("로그인 실패", null);
         String responseBody = om.writeValueAsString(responseDto);
